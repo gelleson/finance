@@ -1,0 +1,46 @@
+entity Accountx {
+	name String required
+    description String,
+    balance Float,
+    currency String,
+}
+
+entity Category {
+	name String required
+}
+
+enum OperationType {
+	INCOME, WITH
+}
+
+entity Transaction {
+	amount Float required
+    credit Accountx
+    debit Accountx
+    category Category
+    operationDate Instant
+    operation OperationType
+}
+
+relationship ManyToOne {
+	Accountx{credit} to Transaction
+    Accountx{debit} to Transaction
+    Category{category} to Transaction
+    User{transaction} to Transaction
+    User{account} to Accountx
+
+} 
+
+
+// Set pagination options
+paginate Transaction with infinite-scroll
+paginate Account, Category with pagination
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl 
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
